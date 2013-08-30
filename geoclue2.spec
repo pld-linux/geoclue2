@@ -5,7 +5,12 @@ Version:	1.99.2
 Release:	1
 License:	GPL v2+
 Group:		Applications
-Source0:	http://cgit.freedesktop.org/geoclue/snapshot/geoclue-%{version}.tar.gz
+# some releases at:
+#Source0:	http://freedesktop.org/~hadess/%{name}-%{version}.tar.gz
+# all available at:
+#Source0:	http://cgit.freedesktop.org/geoclue/snapshot/geoclue-%{version}.tar.gz
+# but cgit regenerates tarball on each get request, so we must use df
+Source0:	geoclue-%{version}.tar.gz
 # Source0-md5:	21551a387a9e5e3e5ebea11254f94a77
 URL:		http://geoclue.freedesktop.org/
 BuildRequires:	GeoIP-devel >= 1.5.1
