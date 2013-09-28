@@ -1,22 +1,19 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	1.99.2
+Version:	2.0.0
 Release:	1
 License:	GPL v2+
 Group:		Applications
-# some releases at:
-#Source0:	http://freedesktop.org/~hadess/%{name}-%{version}.tar.gz
-# all available at:
-#Source0:	http://cgit.freedesktop.org/geoclue/snapshot/geoclue-%{version}.tar.gz
-# but cgit regenerates tarball on each get request, so we must use df
-Source0:	geoclue-%{version}.tar.gz
-# Source0-md5:	21551a387a9e5e3e5ebea11254f94a77
+Source0:	http://www.freedesktop.org/software/geoclue/releases/2.0/geoclue-%{version}.tar.xz
+# Source0-md5:	401ff99d530b177c62afacef0a33efd9
 URL:		http://geoclue.freedesktop.org/
 BuildRequires:	GeoIP-devel >= 1.5.1
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	glib2-devel >= 1:2.34.0
+BuildRequires:	gnome-common
+BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	json-glib-devel >= 0.14
 BuildRequires:	libsoup-devel >= 2.4.0
 BuildRequires:	libtool >= 2:2.2
@@ -60,7 +57,7 @@ Pliki nagłówkowe do programowania z użyciem geoclue2.
 %setup -q -n geoclue-%{version}
 
 %{__sed} -i -e '/po\/Makefile.in/d' -e '/IT_PROG_INTLTOOL/d' configure.ac
-%{__sed} -i -e 's/ po$//' Makefile.am
+%{__sed} -i -e 's/ po docs$/ docs/' Makefile.am
 
 %build
 %{__libtoolize}
