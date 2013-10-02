@@ -2,7 +2,7 @@ Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
 Version:	2.0.0
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Applications
 Source0:	http://www.freedesktop.org/software/geoclue/releases/2.0/geoclue-%{version}.tar.xz
@@ -86,9 +86,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/geoip-update
 %attr(755,root,root) %{_libexecdir}/geoclue
 /etc/dbus-1/system.d/org.freedesktop.GeoClue2.conf
-%{_datadir}/geoclue-2.0
 %{_datadir}/dbus-1/system-services/org.freedesktop.GeoClue2.service
 
 %files devel
 %defattr(644,root,root,755)
 %{_pkgconfigdir}/geoclue-2.0.pc
+%dir %{_datadir}/geoclue-2.0
+%{_datadir}/geoclue-2.0/geoclue-interface.xml
