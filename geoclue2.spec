@@ -1,31 +1,35 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.0.0
-Release:	2
+Version:	2.1.7
+Release:	1
 License:	GPL v2+
 Group:		Applications
-Source0:	http://www.freedesktop.org/software/geoclue/releases/2.0/geoclue-%{version}.tar.xz
-# Source0-md5:	401ff99d530b177c62afacef0a33efd9
+Source0:	http://www.freedesktop.org/software/geoclue/releases/2.1/geoclue-%{version}.tar.xz
+# Source0-md5:	684ca62c4e7b13ebe419d66e5c2e493c
 URL:		http://geoclue.freedesktop.org/
+BuildRequires:	ModemManager-devel >= 1.0.0
+BuildRequires:	NetworkManager-devel >= 0.9.8.0
 BuildRequires:	GeoIP-devel >= 1.5.1
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	glib2-devel >= 1:2.34.0
 BuildRequires:	gnome-common
 BuildRequires:	gtk-doc >= 1.0
+BuildRequires:	intltool >= 0.40.0
 BuildRequires:	json-glib-devel >= 0.14
+BuildRequires:	libnotify-devel
 BuildRequires:	libsoup-devel >= 2.4.0
 BuildRequires:	libtool >= 2:2.2
-BuildRequires:	libxml2-devel >= 2.0
+BuildRequires:	libxml2-devel >= 1:2.7
 BuildRequires:	pkgconfig >= 1:0.22
-BuildRequires:	sed >= 4.0
 BuildRequires:	yelp-tools
 Requires:	GeoIP >= 1.5.1
 Requires:	dbus
 Requires:	glib2 >= 1:2.34.0
 Requires:	json-glib >= 0.14
 Requires:	libsoup >= 2.4.0
+Requires:	libxml2 >= 1:2.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -56,16 +60,15 @@ Pliki nagłówkowe do programowania z użyciem geoclue2.
 %prep
 %setup -q -n geoclue-%{version}
 
-%{__sed} -i -e '/po\/Makefile.in/d' -e '/IT_PROG_INTLTOOL/d' configure.ac
-%{__sed} -i -e 's/ po docs$/ docs/' Makefile.am
-
 %build
+%{__intltoolize}
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
 %configure \
+	--enable-demo-agent \
 	--disable-silent-rules
 
 %{__make}
@@ -85,11 +88,22 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/geoip-lookup
 %attr(755,root,root) %{_bindir}/geoip-update
 %attr(755,root,root) %{_libexecdir}/geoclue
+%dir %{_sysconfdir}/geoclue
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/geoclue/geoclue.conf
+%{systemdunitdir}/geoclue.service
 /etc/dbus-1/system.d/org.freedesktop.GeoClue2.conf
+/etc/dbus-1/system.d/org.freedesktop.GeoClue2.Agent.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.GeoClue2.service
+# demos
+%dir %{_libexecdir}/geoclue-2.0
+%dir %{_libexecdir}/geoclue-2.0/demos
+%attr(755,root,root) %{_libexecdir}/geoclue-2.0/demos/agent
+%attr(755,root,root) %{_libexecdir}/geoclue-2.0/demos/where-am-i
+%{_desktopdir}/geoclue-demo-agent.desktop
+%{_desktopdir}/geoclue-where-am-i.desktop
 
 %files devel
 %defattr(644,root,root,755)
 %{_pkgconfigdir}/geoclue-2.0.pc
-%dir %{_datadir}/geoclue-2.0
-%{_datadir}/geoclue-2.0/geoclue-interface.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.GeoClue2.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.GeoClue2.Agent.xml
