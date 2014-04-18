@@ -1,16 +1,15 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.1.7
+Version:	2.1.8
 Release:	1
 License:	GPL v2+
 Group:		Applications
 Source0:	http://www.freedesktop.org/software/geoclue/releases/2.1/geoclue-%{version}.tar.xz
-# Source0-md5:	684ca62c4e7b13ebe419d66e5c2e493c
+# Source0-md5:	49096b9c3c2458b5e8e36b886983d9aa
 URL:		http://geoclue.freedesktop.org/
 BuildRequires:	ModemManager-devel >= 1.0.0
 BuildRequires:	NetworkManager-devel >= 0.9.8.0
-BuildRequires:	GeoIP-devel >= 1.5.1
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	glib2-devel >= 1:2.34.0
@@ -24,7 +23,6 @@ BuildRequires:	libtool >= 2:2.2
 BuildRequires:	libxml2-devel >= 1:2.7
 BuildRequires:	pkgconfig >= 1:0.22
 BuildRequires:	yelp-tools
-Requires:	GeoIP >= 1.5.1
 Requires:	dbus
 Requires:	glib2 >= 1:2.34.0
 Requires:	json-glib >= 0.14
@@ -85,8 +83,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc NEWS README
-%attr(755,root,root) %{_bindir}/geoip-lookup
-%attr(755,root,root) %{_bindir}/geoip-update
 %attr(755,root,root) %{_libexecdir}/geoclue
 %dir %{_sysconfdir}/geoclue
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/geoclue/geoclue.conf
