@@ -1,15 +1,14 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.1.8
+Version:	2.1.9
 Release:	1
 License:	GPL v2+
 Group:		Applications
 Source0:	http://www.freedesktop.org/software/geoclue/releases/2.1/geoclue-%{version}.tar.xz
-# Source0-md5:	49096b9c3c2458b5e8e36b886983d9aa
+# Source0-md5:	87f91ca7db6cc7726067fcd7bc3cf9bb
 URL:		http://geoclue.freedesktop.org/
 BuildRequires:	ModemManager-devel >= 1.0.0
-BuildRequires:	NetworkManager-devel >= 0.9.8.0
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	glib2-devel >= 1:2.34.0
@@ -20,14 +19,12 @@ BuildRequires:	json-glib-devel >= 0.14
 BuildRequires:	libnotify-devel
 BuildRequires:	libsoup-devel >= 2.4.0
 BuildRequires:	libtool >= 2:2.2
-BuildRequires:	libxml2-devel >= 1:2.7
 BuildRequires:	pkgconfig >= 1:0.22
 BuildRequires:	yelp-tools
 Requires:	dbus
 Requires:	glib2 >= 1:2.34.0
 Requires:	json-glib >= 0.14
 Requires:	libsoup >= 2.4.0
-Requires:	libxml2 >= 1:2.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
