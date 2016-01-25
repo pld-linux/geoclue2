@@ -1,30 +1,41 @@
+#
+# Conditional build:
+%bcond_without	static_libs	# static library
+#
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.1.10
-Release:	2
-License:	GPL v2+
+Version:	2.4.1
+Release:	1
+License:	GPL v2+ (programs), LGPL v2.1+ (library)
 Group:		Applications
-Source0:	http://www.freedesktop.org/software/geoclue/releases/2.1/geoclue-%{version}.tar.xz
-# Source0-md5:	aaa6c7a2a48a8fa74838345722d80e9f
+Source0:	http://www.freedesktop.org/software/geoclue/releases/2.4/geoclue-%{version}.tar.xz
+# Source0-md5:	3b4ccf1ce72cebd6becacedb20f52845
 URL:		http://geoclue.freedesktop.org/
 BuildRequires:	ModemManager-devel >= 1.0.0
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
+BuildRequires:	avahi-devel >= 0.6.10
+BuildRequires:	avahi-glib-devel >= 0.6.10
 BuildRequires:	glib2-devel >= 1:2.34.0
 BuildRequires:	gnome-common
+BuildRequires:	gobject-introspection-devel >= 0.10
 BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	json-glib-devel >= 0.14
 BuildRequires:	libnotify-devel
-BuildRequires:	libsoup-devel >= 2.4.0
+BuildRequires:	libsoup-devel >= 2.42
 BuildRequires:	libtool >= 2:2.2
 BuildRequires:	pkgconfig >= 1:0.22
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	yelp-tools
+BuildRequires:	xz
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	avahi-libs >= 0.6.10
+Requires:	avahi-glib >= 0.6.10
 Requires:	dbus
-Requires:	glib2 >= 1:2.34.0
 Requires:	json-glib >= 0.14
-Requires:	libsoup >= 2.4.0
+Requires:	libsoup >= 2.42
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -37,20 +48,45 @@ Geoclue to modularna usługa geoinformacyjna zbudowana w oparciu o
 system komunikacji D-Bus. Celem projektu jest jak największe
 ułatwienie tworzenia aplikacji uwzględniających lokalizację.
 
+%package libs
+Summary:	Library to interact with Geoclue service
+Summary(pl.UTF-8):	Biblioteka do współpracy z usługą Geoclue
+License:	LGPL v2.1+
+Group:		Libraries
+Requires:	glib2 >= 1:2.34.0
+
+%description libs
+Library to interact with Geoclue service.
+
+%description libs -l pl.UTF-8
+Biblioteka do współpracy z usługą Geoclue.
+
 %package devel
 Summary:	Development package for geoclue2
 Summary(pl.UTF-8):	Pakiet programistyczny geoclue2
+License:	LGPL v2.1+
 Group:		Development/Libraries
-# doesn't require base
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.34.0
-Requires:	json-glib-devel >= 0.14
-Requires:	libsoup-devel >= 2.4.0
 
 %description devel
 Header files for development with geoclue2.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe do programowania z użyciem geoclue2.
+
+%package static
+Summary:	Static geoclue2 library
+Summary(pl.UTF-8):	Statyczna biblioteka geoclue2
+License:	LGPL v2.1+
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static geoclue2 library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka geoclue2.
 
 %prep
 %setup -q -n geoclue-%{version}
@@ -65,6 +101,7 @@ Pliki nagłówkowe do programowania z użyciem geoclue2.
 %configure \
 	--enable-demo-agent \
 	--disable-silent-rules \
+	%{?with_static_libs:--enable-static} \
 	--with-systemdsystemunitdir=%{systemdunitdir}
 
 %{__make}
@@ -75,8 +112,14 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libgeoclue-2.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
@@ -96,8 +139,27 @@ rm -rf $RPM_BUILD_ROOT
 %{_desktopdir}/geoclue-demo-agent.desktop
 %{_desktopdir}/geoclue-where-am-i.desktop
 
+%files libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libgeoclue-2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libgeoclue-2.so.0
+%{_libdir}/girepository-1.0/Geoclue-2.0.typelib
+
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libgeoclue-2.so
+%{_includedir}/libgeoclue-2.0
+%{_datadir}/gir-1.0/Geoclue-2.0.gir
 %{_pkgconfigdir}/geoclue-2.0.pc
+%{_pkgconfigdir}/libgeoclue-2.0.pc
 %{_datadir}/dbus-1/interfaces/org.freedesktop.GeoClue2.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.GeoClue2.Agent.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.GeoClue2.Client.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.GeoClue2.Location.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.GeoClue2.Manager.xml
+
+%if %{with static_libs}
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libgeoclue-2.a
+%endif
