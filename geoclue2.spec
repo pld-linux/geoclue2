@@ -5,19 +5,19 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.4.7
+Version:	2.4.12
 Release:	1
 License:	GPL v2+ (programs), LGPL v2.1+ (library)
 Group:		Applications
 Source0:	https://www.freedesktop.org/software/geoclue/releases/2.4/geoclue-%{version}.tar.xz
-# Source0-md5:	e50086e742740413669ab72d8572db05
+# Source0-md5:	469bfcebef36723b34aaa5816de93e18
 URL:		https://geoclue.freedesktop.org/
-BuildRequires:	ModemManager-devel >= 1.0.0
+BuildRequires:	ModemManager-devel >= 1.6
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	avahi-devel >= 0.6.10
 BuildRequires:	avahi-glib-devel >= 0.6.10
-BuildRequires:	glib2-devel >= 1:2.34.0
+BuildRequires:	glib2-devel >= 1:2.44.0
 BuildRequires:	gnome-common
 BuildRequires:	gobject-introspection-devel >= 0.10
 BuildRequires:	gtk-doc >= 1.0
@@ -53,7 +53,7 @@ Summary:	Library to interact with Geoclue service
 Summary(pl.UTF-8):	Biblioteka do współpracy z usługą Geoclue
 License:	LGPL v2.1+
 Group:		Libraries
-Requires:	glib2 >= 1:2.34.0
+Requires:	glib2 >= 1:2.44.0
 
 %description libs
 Library to interact with Geoclue service.
@@ -67,7 +67,7 @@ Summary(pl.UTF-8):	Pakiet programistyczny geoclue2
 License:	LGPL v2.1+
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.34.0
+Requires:	glib2-devel >= 1:2.44.0
 
 %description devel
 Header files for development with geoclue2.
@@ -87,6 +87,19 @@ Static geoclue2 library.
 
 %description static -l pl.UTF-8
 Statyczna biblioteka geoclue2.
+
+%package -n vala-geoclue2
+Summary:	Vala API for geoclue2 library
+Summary(pl.UTF-8):	Interfejs języka Vala do biblioteki geoclue2
+License:	LGPL v2.1+
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description -n vala-geoclue2
+Vala API for geoclue2 library.
+
+%description -n vala-geoclue2 -l pl.UTF-8
+Interfejs języka Vala do biblioteki geoclue2.
 
 %prep
 %setup -q -n geoclue-%{version}
@@ -132,6 +145,7 @@ rm -rf $RPM_BUILD_ROOT
 /etc/dbus-1/system.d/org.freedesktop.GeoClue2.Agent.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.GeoClue2.service
 # demos
+/etc/xdg/autostart/geoclue-demo-agent.desktop
 %dir %{_libexecdir}/geoclue-2.0
 %dir %{_libexecdir}/geoclue-2.0/demos
 %attr(755,root,root) %{_libexecdir}/geoclue-2.0/demos/agent
@@ -163,3 +177,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/libgeoclue-2.a
 %endif
+
+%files -n vala-geoclue2
+%defattr(644,root,root,755)
+%{_datadir}/vala/vapi/libgeoclue-2.0.deps
+%{_datadir}/vala/vapi/libgeoclue-2.0.vapi
