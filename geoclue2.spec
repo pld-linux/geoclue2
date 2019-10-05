@@ -5,12 +5,13 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.4.12
+Version:	2.4.13
 Release:	1
 License:	GPL v2+ (programs), LGPL v2.1+ (library)
 Group:		Applications
-Source0:	https://www.freedesktop.org/software/geoclue/releases/2.4/geoclue-%{version}.tar.xz
-# Source0-md5:	469bfcebef36723b34aaa5816de93e18
+#Source0Download: https://gitlab.freedesktop.org/geoclue/geoclue/-/tags
+Source0:	https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/%{version}/geoclue-%{version}.tar.bz2
+# Source0-md5:	19dd149851b3e15c74ede07ecd5c7a36
 URL:		https://geoclue.freedesktop.org/
 BuildRequires:	ModemManager-devel >= 1.6
 BuildRequires:	autoconf >= 2.63
@@ -21,6 +22,7 @@ BuildRequires:	glib2-devel >= 1:2.44.0
 BuildRequires:	gnome-common
 BuildRequires:	gobject-introspection-devel >= 0.10
 BuildRequires:	gtk-doc >= 1.0
+BuildRequires:	gtk-doc-automake >= 1.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	json-glib-devel >= 0.14
 BuildRequires:	libnotify-devel
@@ -105,6 +107,7 @@ Interfejs języka Vala do biblioteki geoclue2.
 %setup -q -n geoclue-%{version}
 
 %build
+%{__gtkdocize}
 %{__intltoolize}
 %{__libtoolize}
 %{__aclocal} -I m4
