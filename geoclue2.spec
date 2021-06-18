@@ -5,21 +5,18 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.4.13
+Version:	2.5.7
 Release:	1
 License:	GPL v2+ (programs), LGPL v2.1+ (library)
 Group:		Applications
 #Source0Download: https://gitlab.freedesktop.org/geoclue/geoclue/-/tags
 Source0:	https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/%{version}/geoclue-%{version}.tar.bz2
-# Source0-md5:	19dd149851b3e15c74ede07ecd5c7a36
+# Source0-md5:	f6e731a21d458168eda613816797eb73
 URL:		https://geoclue.freedesktop.org/
 BuildRequires:	ModemManager-devel >= 1.6
-BuildRequires:	autoconf >= 2.63
-BuildRequires:	automake >= 1:1.11
 BuildRequires:	avahi-devel >= 0.6.10
 BuildRequires:	avahi-glib-devel >= 0.6.10
 BuildRequires:	glib2-devel >= 1:2.44.0
-BuildRequires:	gnome-common
 BuildRequires:	gobject-introspection-devel >= 0.10
 BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	gtk-doc-automake >= 1.0
@@ -27,9 +24,13 @@ BuildRequires:	intltool >= 0.40.0
 BuildRequires:	json-glib-devel >= 0.14
 BuildRequires:	libnotify-devel
 BuildRequires:	libsoup-devel >= 2.42
-BuildRequires:	libtool >= 2:2.2
+BuildRequires:	meson >= 0.47.2
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig >= 1:0.22
+BuildRequires:	rpm-build >= 4.6
+BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	tar >= 1:1.22
+BuildRequires:	vala
 BuildRequires:	yelp-tools
 BuildRequires:	xz
 Requires:	%{name}-libs = %{version}-%{release}
@@ -96,6 +97,7 @@ Summary(pl.UTF-8):	Interfejs języka Vala do biblioteki geoclue2
 License:	LGPL v2.1+
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
+BuildArch:	noarch
 
 %description -n vala-geoclue2
 Vala API for geoclue2 library.
@@ -103,33 +105,37 @@ Vala API for geoclue2 library.
 %description -n vala-geoclue2 -l pl.UTF-8
 Interfejs języka Vala do biblioteki geoclue2.
 
+%package apidocs
+Summary:	API documentation for geoclue2 library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki geoclue2
+Group:		Documentation
+BuildArch:	noarch
+
+%description apidocs
+API documentation for geoclue2 library.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API biblioteki geoclue2.
+
 %prep
 %setup -q -n geoclue-%{version}
 
 %build
-%{__gtkdocize}
-%{__intltoolize}
-%{__libtoolize}
-%{__aclocal} -I m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	--enable-demo-agent \
-	--disable-silent-rules \
-	%{?with_static_libs:--enable-static} \
-	--with-systemdsystemunitdir=%{systemdunitdir}
+%meson build \
+	%{!?with_static_libs:--default-library=shared} \
+	-Dsystemd-system-unit-dir=%{systemdunitdir}
 
-%{__make}
+# TODO: -Ddbus-srv-user= (nonroot)
+
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+%ninja_install -C build
 
-# obsoleted by pkg-config
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libgeoclue-2.la
+# resolve conflict with geoclue-apidocs 0.12.x
+%{__mv} $RPM_BUILD_ROOT%{_gtkdocdir}/geoclue{,-2.0}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -139,7 +145,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc NEWS README
+%doc NEWS README.md
 %attr(755,root,root) %{_libexecdir}/geoclue
 %dir %{_sysconfdir}/geoclue
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/geoclue/geoclue.conf
@@ -155,6 +161,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/geoclue-2.0/demos/where-am-i
 %{_desktopdir}/geoclue-demo-agent.desktop
 %{_desktopdir}/geoclue-where-am-i.desktop
+%{_mandir}/man5/geoclue.5*
 
 %files libs
 %defattr(644,root,root,755)
@@ -185,3 +192,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_datadir}/vala/vapi/libgeoclue-2.0.deps
 %{_datadir}/vala/vapi/libgeoclue-2.0.vapi
+
+%files apidocs
+%defattr(644,root,root,755)
+%{_gtkdocdir}/geoclue-2.0
+%{_gtkdocdir}/libgeoclue
