@@ -5,13 +5,13 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.6.0
+Version:	2.7.0
 Release:	1
 License:	GPL v2+ (programs), LGPL v2.1+ (library)
 Group:		Applications
 #Source0Download: https://gitlab.freedesktop.org/geoclue/geoclue/-/tags
 Source0:	https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/%{version}/geoclue-%{version}.tar.bz2
-# Source0-md5:	07ed45bc145e87d7f76fa521d5412f29
+# Source0-md5:	8226cc9d4b2750b6ebdfd59e7815bf2a
 URL:		https://geoclue.freedesktop.org/
 BuildRequires:	ModemManager-devel >= 1.6
 BuildRequires:	avahi-devel >= 0.6.10
@@ -23,8 +23,8 @@ BuildRequires:	gtk-doc-automake >= 1.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	json-glib-devel >= 0.14
 BuildRequires:	libnotify-devel
-BuildRequires:	libsoup-devel >= 2.42
-BuildRequires:	meson >= 0.47.2
+BuildRequires:	libsoup3-devel >= 3.0.0
+BuildRequires:	meson >= 0.60.0
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig >= 1:0.22
 BuildRequires:	rpm-build >= 4.6
@@ -38,7 +38,7 @@ Requires:	avahi-libs >= 0.6.10
 Requires:	avahi-glib >= 0.6.10
 Requires:	dbus
 Requires:	json-glib >= 0.14
-Requires:	libsoup >= 2.42
+Requires:	libsoup3 >= 3.0.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
