@@ -5,18 +5,18 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.7.0
+Version:	2.7.2
 Release:	1
 License:	GPL v2+ (programs), LGPL v2.1+ (library)
 Group:		Applications
 #Source0Download: https://gitlab.freedesktop.org/geoclue/geoclue/-/tags
 Source0:	https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/%{version}/geoclue-%{version}.tar.bz2
-# Source0-md5:	8226cc9d4b2750b6ebdfd59e7815bf2a
+# Source0-md5:	d58d6f3286a6b3ace395fc36468aace2
 URL:		https://geoclue.freedesktop.org/
-BuildRequires:	ModemManager-devel >= 1.6
+BuildRequires:	ModemManager-devel >= 1.12
 BuildRequires:	avahi-devel >= 0.6.10
 BuildRequires:	avahi-glib-devel >= 0.6.10
-BuildRequires:	glib2-devel >= 1:2.44.0
+BuildRequires:	glib2-devel >= 1:2.74.0
 BuildRequires:	gobject-introspection-devel >= 0.10
 BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	gtk-doc-automake >= 1.0
@@ -34,6 +34,7 @@ BuildRequires:	vala
 BuildRequires:	yelp-tools
 BuildRequires:	xz
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	ModemManager-libs >= 1.12
 Requires:	avahi-libs >= 0.6.10
 Requires:	avahi-glib >= 0.6.10
 Requires:	dbus
@@ -56,7 +57,7 @@ Summary:	Library to interact with Geoclue service
 Summary(pl.UTF-8):	Biblioteka do współpracy z usługą Geoclue
 License:	LGPL v2.1+
 Group:		Libraries
-Requires:	glib2 >= 1:2.44.0
+Requires:	glib2 >= 1:2.74.0
 
 %description libs
 Library to interact with Geoclue service.
@@ -70,7 +71,7 @@ Summary(pl.UTF-8):	Pakiet programistyczny geoclue2
 License:	LGPL v2.1+
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.44.0
+Requires:	glib2-devel >= 1:2.74.0
 
 %description devel
 Header files for development with geoclue2.
@@ -150,8 +151,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/geoclue
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/geoclue/geoclue.conf
 %{systemdunitdir}/geoclue.service
-/etc/dbus-1/system.d/org.freedesktop.GeoClue2.conf
-/etc/dbus-1/system.d/org.freedesktop.GeoClue2.Agent.conf
+%{_datadir}/dbus-1/system.d/org.freedesktop.GeoClue2.conf
+%{_datadir}/dbus-1/system.d/org.freedesktop.GeoClue2.Agent.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.GeoClue2.service
 %{_datadir}/polkit-1/rules.d/org.freedesktop.GeoClue2.rules
 # demos
