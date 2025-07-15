@@ -122,18 +122,18 @@ Dokumentacja API biblioteki geoclue2.
 %setup -q -n geoclue-%{version}
 
 %build
-%meson build \
+%meson \
 	%{!?with_static_libs:--default-library=shared} \
 	-Dsystemd-system-unit-dir=%{systemdunitdir}
 
 # TODO: -Ddbus-srv-user= (nonroot)
 
-%ninja_build -C build
+%meson_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%ninja_install -C build
+%meson_install
 
 # resolve conflict with geoclue-apidocs 0.12.x
 %{__mv} $RPM_BUILD_ROOT%{_gtkdocdir}/geoclue{,-2.0}
