@@ -5,13 +5,13 @@
 Summary:	A modular geoinformation service
 Summary(pl.UTF-8):	Modularna usługa geoinformacyjna
 Name:		geoclue2
-Version:	2.7.2
+Version:	2.8.2
 Release:	1
 License:	GPL v2+ (programs), LGPL v2.1+ (library)
 Group:		Applications
 #Source0Download: https://gitlab.freedesktop.org/geoclue/geoclue/-/tags
 Source0:	https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/%{version}/geoclue-%{version}.tar.bz2
-# Source0-md5:	d58d6f3286a6b3ace395fc36468aace2
+# Source0-md5:	b40de9b467b79d0d4fad7b40dea21e04
 URL:		https://geoclue.freedesktop.org/
 BuildRequires:	ModemManager-devel >= 1.12
 BuildRequires:	avahi-devel >= 0.6.10
@@ -167,13 +167,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libgeoclue-2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgeoclue-2.so.0
+%{_libdir}/libgeoclue-2.so.*.*.*
+%ghost %{_libdir}/libgeoclue-2.so.0
 %{_libdir}/girepository-1.0/Geoclue-2.0.typelib
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libgeoclue-2.so
+%{_libdir}/libgeoclue-2.so
 %{_includedir}/libgeoclue-2.0
 %{_datadir}/gir-1.0/Geoclue-2.0.gir
 %{_pkgconfigdir}/geoclue-2.0.pc
